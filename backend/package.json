@@ -20,8 +20,11 @@
     "express": "^5.1.0",
     "mysql2": "^3.15.3",
     "nodemailer": "^7.0.10"
+<<<<<<< HEAD
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
+=======
+>>>>>>> c4bff2ca761f2a0dd175b19db1e28b1d6b35c59e
   }
 }

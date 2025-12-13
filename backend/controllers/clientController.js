@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import db from "../config/db.js";
 
 export const getClients = (req, res) => {
@@ -18,3 +19,25 @@ export const addClient = (req, res) => {
     }
   );
 };
+=======
+import db from "../config/db.js";
+
+export const getClients = (req, res) => {
+  db.query("SELECT * FROM clients", (err, results) => {
+    if (err) return res.status(500).send(err);
+    res.json(results);
+  });
+};
+
+export const addClient = (req, res) => {
+  const { name, email, phone } = req.body;
+  db.query(
+    "INSERT INTO clients (name, email, phone) VALUES (?, ?, ?)",
+    [name, email, phone],
+    (err, results) => {
+      if (err) return res.status(500).send(err);
+      res.json({ message: "Client added!", id: results.insertId });
+    }
+  );
+};
+>>>>>>> c4bff2ca761f2a0dd175b19db1e28b1d6b35c59e
