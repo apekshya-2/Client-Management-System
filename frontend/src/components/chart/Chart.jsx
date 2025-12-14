@@ -75,8 +75,8 @@ const Chart = ({ aspect, title }) => {
 
           <Tooltip />
           <Legend />
-          <Bar dataKey="SB" fill="#8884d8" />
-          <Bar dataKey="TA" fill="#82ca9d" />
+          <Bar dataKey="SB" fill="#00B0FC" />
+          <Bar dataKey="TA" fill="#A4DFFD" />
         </BarChart>
       </ResponsiveContainer>
     </div>

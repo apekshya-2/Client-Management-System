@@ -1,8 +1,96 @@
-import React from "react";
+import axios from "axios";
 import "./login.scss";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  return <div className="login">Login</div>;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        { email, password }
+      );
+
+      if (response.data.success) {
+        toast.success("Login successful!");
+
+        const { token, user } = response.data;
+
+        // Save token
+        sessionStorage.setItem("authToken", token);
+
+        // Save user info
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify({
+            isLoggedIn: true,
+            userData: user,
+          })
+        );
+
+        // 🔐 Role based redirect
+        if (user.role === "admin") {
+          navigate("/");
+        } else {
+          navigate("/user");
+        }
+      } else {
+        toast.error(response.data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again later."
+      );
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <h2>Login</h2>
+
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button type="submit" className="login-btn">
+          Login
+        </button>
+      </form>
+
+      <p style={{ textAlign: "center" }}>
+        Don't have an account?{" "}
+        <Link to="/register" className="toggle-link">
+          Sign Up
+        </Link>
+      </p>
+    </div>
+  );
 };
 
 export default Login;

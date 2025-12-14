@@ -6,41 +6,82 @@ import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
 import Product from "./pages/product/Product";
 import Customers from "./pages/customers/Customers";
+import UserHomeScreen from "./pages/userHome/UserHomeScreen";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
 import { userInputs, productInputs } from "./formData";
 import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <ProtectedRoute role="admin">
+        <Home />
+      </ProtectedRoute>
+    ),
   },
   {
-    path: "/users/:userId",
-    element: <Single />,
-  },
-  {
-    path: "/products/:productId",
-    element: <Single />,
+    path: "/user",
+    element: (
+      <ProtectedRoute role="user">
+        <UserHomeScreen />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/users",
-    element: <Customers />,
+    element: (
+      <ProtectedRoute role="admin">
+        <Customers />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/products",
-    element: <Product />,
+    element: (
+      <ProtectedRoute role="admin">
+        <Product />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/users/:userId",
+    element: (
+      <ProtectedRoute role="admin">
+        <Single />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/products/:productId",
+    element: (
+      <ProtectedRoute role="admin">
+        <Single />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/users/:userId/new",
-    element: <New inputs={userInputs} title={"Add New User"} />,
+    element: (
+      <ProtectedRoute role="admin">
+        <New inputs={userInputs} title="Add New User" />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/products/:productId/new",
-    element: <New inputs={productInputs} title={"Add New Product"} />,
+    element: (
+      <ProtectedRoute role="admin">
+        <New inputs={productInputs} title="Add New Product" />
+      </ProtectedRoute>
+    ),
   },
-
   {
     path: "/register",
     element: <Register />,
@@ -57,6 +98,7 @@ function App() {
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <RouterProvider router={router} />
+       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
